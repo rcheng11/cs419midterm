@@ -1,0 +1,19 @@
+.headers{
+    background-color: lightgray;
+    color: #00356b;
+    text-align: center;
+}
+#title{
+    font-size: 20px;
+}
+#timestamp{
+    font-size: 14px;
+}
+.card{
+    text-align: center;
+    padding: 15px;
+    margin: 20px;
+    box-shadow: 0px 10px 6px rgba(0, 0, 0, 0.5);
+    border: #00356b solid 1px;
+    border-radius: 15px;
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="static/slideshow.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class="headers">
+            <h1 id="title">Art Gallery Slideshow</h1>
+            <h2 id="timestamp"></h2>
+        </div>
+        <p>Number of Possible Objects: {{ num_ids }}</p>
+        <button id="next">Next</button>
+        <button id="pause">Click Next First</button>
+        <div class="card" id="infocard">
+
+        </div>
+        <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            function showTime() {
+                let currentDate = new Date();
+                $("#timestamp").html(currentDate)
+            }
+            function handleResponse(response){
+                $("#infocard").empty()
+                $("#infocard").append(response)
+            }
+
+            let request = null;
+            function getResults(){
+                author = this.value
+                author = encodeURIComponent(author);
+                let url = '/searchresults'
+
+                if (request != null)
+                request.abort();
+
+                request = $.ajax(
+                {
+                    type: 'GET',
+                    url: url,
+                    success: handleResponse
+                }
+                );
+            }
+
+            let playing = false
+            let interval = null
+            function autoPlay(){
+                // start autoplay
+                if(playing == false){
+                    interval = setInterval(getResults, 5000)
+                    $("#pause").html("Pause")
+                    playing = true
+                }
+                // stop autoplay
+                else{
+                    clearInterval(interval)
+                    $("#pause").html("Resume")
+                    playing = false
+                }
+            }
+
+            function nextClick(){
+                playing = true
+                interval = setInterval(getResults, 5000)
+                $("#pause").html("Pause")
+                getResults()
+                $("#pause").click(autoPlay)
+            }
+            
+            function setup(){
+                showTime()
+                getResults()
+                $("#next").click(nextClick)
+            }
+            document.addEventListener("DOMContentLoaded", setup)
+        </script>
+    </body>
+</html>
